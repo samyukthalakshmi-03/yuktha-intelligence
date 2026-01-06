@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Yuktha Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: #0f172a;
+      overflow: hidden;
+      color: white;
+    }
+
+    .card {
+      background: rgba(0,0,0,0.85);
+      padding: 40px 30px;
+      border-radius: 25px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 15px 50px rgba(99,102,241,0.5);
+      text-align: center;
+      backdrop-filter: blur(10px);
+      animation: slideIn 1s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #6366f1;
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 2rem;
+      text-shadow: 0 0 10px #6366f1;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #6366f1;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 15px;
+      border: none;
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(99,102,241,0.2);
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 15px;
+      width: 100%;
+      font-weight: 700;
+      border-radius: 15px;
+      border: none;
+      background: #6366f1;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(99,102,241,0.4);
+    }
+
+    pre {
+      margin-top: 25px;
+      background: rgba(0,0,0,0.7);
+      padding: 20px;
+      border-radius: 15px;
+      max-height: 300px;
+      overflow-y: auto;
+      text-align: left;
+      white-space: pre-wrap;
+      box-shadow: 0 0 15px rgba(99,102,241,0.3);
+    }
+    .particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #a5b4fc 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: float 15s linear infinite;
+}
+
+@keyframes float {
+  from {
+    transform: translateY(110vh) translateX(0) scale(1);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-10vh) translateX(40px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+  </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+  <div class="card">
+    <h2>Yuktha Intelligence 🤖</h2>
+    <div class="badge" id="personaBadge">AI Persona</div>
+
+    <input id="business" placeholder="Business type (e.g. Bakery)">
+    <input id="task" placeholder="Task (e.g. Marketing)">
+    <textarea id="details" placeholder="Describe your need..."></textarea>
+    <button onclick="generate()">Generate</button>
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    async function generate() {
+      const business = document.getElementById("business").value.trim();
+      const task = document.getElementById("task").value.trim();
+      const details = document.getElementById("details").value.trim();
+
+      if (!business || !task || !details) {
+        alert("Please fill in all fields before generating 🤖");
+        return;
+      }
+
+      document.getElementById("output").textContent = "Thinking...";
+      document.getElementById("personaBadge").textContent = "Analyzing...";
+
+      const res = await fetch("http://127.0.0.1:5000/generate", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ business, task, details })
+      });
+
+      const data = await res.json();
+      typeText(data.result);
+    }
+
+    function typeText(text) {
+      const output = document.getElementById("output");
+      output.textContent = "";
+      let i = 0;
+
+      const interval = setInterval(() => {
+        output.textContent += text.charAt(i);
+        i++;
+        if (i >= text.length) clearInterval(interval);
+      }, 15);
+
+      const match = text.match(/AI Persona:\s*(.*)/);
+      if (match) document.getElementById("personaBadge").textContent = match[1];
+    }
+   
+  const container = document.getElementById("particles");
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDelay = Math.random() * 15 + "s";
+    p.style.animationDuration = 10 + Math.random() * 10 + "s";
+    container.appendChild(p);
+  }
+
+  </script>
+</body>
+</html>
