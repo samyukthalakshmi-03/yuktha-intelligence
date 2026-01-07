@@ -4,10 +4,10 @@ import os
 
 app = Flask(__name__)
 
-# 🔐 Set API key from environment variable
+# Configure API key from environment variable
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# Using the latest Gemini Flash model
+# Using Gemini Flash latest model
 model = genai.GenerativeModel("models/gemini-flash-latest")
 
 @app.route("/")
@@ -21,7 +21,6 @@ def generate():
     task = data.get("task", "").strip()
     details = data.get("details", "").strip()
 
-    # If everything is empty, return a warning
     if not business and not task and not details:
         return jsonify({"result": "⚠ Please fill in at least one field."})
 
@@ -42,4 +41,4 @@ Generate a professional, structured response.
         return jsonify({"result": f"⚠ Error: {str(e)}"})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)

@@ -1,8 +1,11 @@
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 WORKDIR /app
-COPY . .
+COPY . /app
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install -r requirements.txt
 
-CMD gunicorn --bind :8080 app:app
+EXPOSE 5000
+
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
