@@ -4,185 +4,200 @@
   <meta charset="UTF-8">
   <title>Yuktha Intelligence</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
+      background: radial-gradient(circle at top, #0f172a, #020617);
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
-      background: #0f172a;
       overflow: hidden;
       color: white;
     }
 
+    .stars {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: float 12s linear infinite;
+    }
+
+    @keyframes float {
+      from { transform: translateY(110vh) translateX(0); opacity: 0; }
+      to   { transform: translateY(-10vh) translateX(40px); opacity: 1; }
+    }
+
     .card {
+      position: relative;
+      z-index: 1;
       background: rgba(0,0,0,0.85);
       padding: 40px 30px;
       border-radius: 25px;
-      max-width: 600px;
       width: 100%;
-      box-shadow: 0 15px 50px rgba(99,102,241,0.5);
+      max-width: 600px;
       text-align: center;
-      backdrop-filter: blur(10px);
-      animation: slideIn 1s ease-out;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-40px); }
-      to { opacity: 1; transform: translateY(0); }
+      box-shadow: 0 15px 50px rgba(99,102,241,0.5);
+      backdrop-filter: blur(12px);
     }
 
     h2 {
-      color: #6366f1;
+      color: #818cf8;
       margin-bottom: 20px;
-      font-weight: 700;
       font-size: 2rem;
-      text-shadow: 0 0 10px #6366f1;
-    }
-
-    .badge {
-      display: inline-block;
-      background: #6366f1;
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-bottom: 15px;
     }
 
     input, textarea {
       width: 100%;
-      padding: 15px;
-      margin-top: 15px;
-      border-radius: 15px;
+      padding: 14px;
+      margin-top: 14px;
+      border-radius: 14px;
       border: none;
       background: rgba(255,255,255,0.05);
       color: #fff;
       outline: none;
-      box-shadow: 0 0 5px rgba(99,102,241,0.2);
     }
 
     button {
       margin-top: 20px;
-      padding: 15px;
+      padding: 14px;
       width: 100%;
-      font-weight: 700;
-      border-radius: 15px;
+      border-radius: 14px;
       border: none;
       background: #6366f1;
-      color: #fff;
+      font-weight: 700;
+      color: white;
       cursor: pointer;
-      box-shadow: 0 5px 20px rgba(99,102,241,0.4);
     }
 
     pre {
-      margin-top: 25px;
-      background: rgba(0,0,0,0.7);
+      margin-top: 20px;
+      background: rgba(0,0,0,0.6);
       padding: 20px;
-      border-radius: 15px;
-      max-height: 300px;
+      border-radius: 14px;
+      max-height: 280px;
       overflow-y: auto;
       text-align: left;
       white-space: pre-wrap;
-      box-shadow: 0 0 15px rgba(99,102,241,0.3);
     }
-    .particles {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
+
+    .loader {
+      margin-top: 15px;
+      display: none;
+      font-size: 0.9rem;
+      color: #a5b4fc;
+      letter-spacing: 2px;
+    }
+
+    .dot::after {
+      content: "";
+      animation: dots 1.5s infinite;
+    }
+
+    @keyframes dots {
+      0% { content: ""; }
+      33% { content: "."; }
+      66% { content: ".."; }
+      100% { content: "..."; }
+    }
+    .title-glow {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #818cf8, #22d3ee, #a5b4fc);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 6s ease infinite, pulse 3s ease-in-out infinite;
+  text-shadow: 0 0 12px rgba(99,102,241,0.8);
 }
 
-.particle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: radial-gradient(circle, #a5b4fc 0%, transparent 70%);
-  border-radius: 50%;
-  opacity: 0.8;
-  animation: float 15s linear infinite;
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-@keyframes float {
-  from {
-    transform: translateY(110vh) translateX(0) scale(1);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(-10vh) translateX(40px) scale(1.2);
-    opacity: 1;
-  }
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.emoji {
+  background: none;
+  -webkit-text-fill-color: initial;
+  filter: none;
+  animation: none;
+  text-shadow: none;
 }
 
   </style>
 </head>
 <body>
-    <div class="particles" id="particles"></div>
 
-  <div class="card">
-    <h2>Yuktha Intelligence 🤖</h2>
-    <div class="badge" id="personaBadge">AI Persona</div>
+<div class="stars" id="stars"></div>
 
-    <input id="business" placeholder="Business type (e.g. Bakery)">
-    <input id="task" placeholder="Task (e.g. Marketing)">
-    <textarea id="details" placeholder="Describe your need..."></textarea>
-    <button onclick="generate()">Generate</button>
-    <pre id="output"></pre>
-  </div>
+<div class="card">
+  <h2 class="title-glow">
+  Yuktha Intelligence <span class="emoji">🤖</span>
+</h2>
 
-  <script>
-    async function generate() {
-      const business = document.getElementById("business").value.trim();
-      const task = document.getElementById("task").value.trim();
-      const details = document.getElementById("details").value.trim();
+  <input id="business" placeholder="Business type (e.g. Coffee Shop)">
+  <input id="task" placeholder="Task (e.g. Marketing)">
+  <textarea id="details" placeholder="Describe your need..."></textarea>
 
-      if (!business || !task || !details) {
-        alert("Please fill in all fields before generating 🤖");
-        return;
-      }
+  <button onclick="generate()">Generate</button>
 
-      document.getElementById("output").textContent = "Thinking...";
-      document.getElementById("personaBadge").textContent = "Analyzing...";
+  <div class="loader" id="loader">Thinking<span class="dot"></span></div>
+  <pre id="output"></pre>
+</div>
 
-      const res = await fetch("http://127.0.0.1:5000/generate", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ business, task, details })
-      });
-
-      const data = await res.json();
-      typeText(data.result);
-    }
-
-    function typeText(text) {
-      const output = document.getElementById("output");
-      output.textContent = "";
-      let i = 0;
-
-      const interval = setInterval(() => {
-        output.textContent += text.charAt(i);
-        i++;
-        if (i >= text.length) clearInterval(interval);
-      }, 15);
-
-      const match = text.match(/AI Persona:\s*(.*)/);
-      if (match) document.getElementById("personaBadge").textContent = match[1];
-    }
-   
-  const container = document.getElementById("particles");
-  for (let i = 0; i < 60; i++) {
-    const p = document.createElement("div");
-    p.className = "particle";
-    p.style.left = Math.random() * 100 + "vw";
-    p.style.animationDelay = Math.random() * 15 + "s";
-    p.style.animationDuration = 10 + Math.random() * 10 + "s";
-    container.appendChild(p);
+<script>
+  const stars = document.getElementById("stars");
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement("div");
+    s.className = "star";
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.animationDelay = Math.random() * 12 + "s";
+    s.style.animationDuration = 8 + Math.random() * 10 + "s";
+    stars.appendChild(s);
   }
 
-  </script>
+  async function generate() {
+    const business = document.getElementById("business").value;
+    const task = document.getElementById("task").value;
+    const details = document.getElementById("details").value;
+
+    const output = document.getElementById("output");
+    const loader = document.getElementById("loader");
+
+    output.textContent = "";
+    loader.style.display = "block";
+
+    const res = await fetch("/generate", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ business, task, details })
+    });
+
+    const data = await res.json();
+
+    loader.style.display = "none";
+    output.textContent = data.result;
+  }
+</script>
+
 </body>
 </html>

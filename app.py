@@ -1,81 +1,40 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from datetime import datetime
-import random
+from flask import Flask, request, jsonify, render_template
+import google.generativeai as genai
+import os
 
 app = Flask(__name__)
-CORS(app)
 
-suggestions = [
-    "Strengthen your online presence through social media.",
-    "Offer limited-time discounts to attract new customers.",
-    "Collect feedback and improve services.",
-    "Use email or WhatsApp marketing for engagement.",
-    "Collaborate with influencers to reach wider audience.",
-    "Optimize website SEO to attract local customers.",
-    "Run targeted ads on Instagram and Facebook.",
-    "Host virtual events or webinars to educate clients.",
-    "Implement loyalty programs to retain customers.",
-    "Create engaging video content for brand awareness."
-]
+# 🔐 Set API key from environment variable
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-personas = {
-    "Strategist": [
-        "Focus on marketing & branding.",
-        "Plan long-term growth strategies.",
-        "Analyze competitors to stay ahead."
-    ],
-    "Creative": [
-        "Use viral campaigns and trends.",
-        "Design creative visuals for social media.",
-        "Experiment with unique content styles."
-    ],
-    "Efficiency": [
-        "Automate workflows to save time.",
-        "Optimize cost-efficiency for operations.",
-        "Prioritize high-impact tasks first."
-    ]
-}
+model = genai.GenerativeModel("models/gemini-flash-latest")
 
 @app.route("/")
 def home():
-    return "Yuktha Intelligence backend is running 🚀"
+    return render_template("index.html")
 
 @app.route("/generate", methods=["POST"])
 def generate():
-    data = request.json or {}
-    business = data.get("business", "").strip()
-    task = data.get("task", "").strip()
-    details = data.get("details", "").strip()
+    data = request.json
+    business = data.get("business", "")
+    task = data.get("task", "")
+    details = data.get("details", "")
 
-    if not business or not task or not details:
-        return jsonify({"result": "⚠ Please provide business, task, and details."})
+    prompt = f"""
+You are an AI assistant for a business platform called Yuktha Intelligence.
 
-    persona_name, persona_suggestions = random.choice(list(personas.items()))
-    combined = suggestions + persona_suggestions
-    chosen = random.sample(combined, 3)
+Business type: {business}
+Task: {task}
+Details: {details}
 
-    output_with_scores = ""
-    for i, s in enumerate(chosen, 1):
-        score = random.randint(75, 95)
-        output_with_scores += f"{i}. {s} (Priority: {score}%)\n"
+Generate a professional, structured response.
+"""
 
-    result = f"""
-YUKTHA INTELLIGENCE — BUSINESS INSIGHT
-
-AI Persona: {persona_name}
-Business Type: {business}
-Requested Task: {task}
-
-Strategy Recommendations:
-{output_with_scores}
-Additional Notes:
-{details}
-
-Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-""".strip()
-
-    return jsonify({"result": result})
+    try:
+        response = model.generate_content(prompt)
+        return jsonify({"result": response.text})
+    except Exception as e:
+        return jsonify({"result": f"⚠ Error: {str(e)}"})
 
 if __name__ == "__main__":
     app.run(debug=True)
