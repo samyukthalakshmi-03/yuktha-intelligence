@@ -1,20 +1,20 @@
 # Yuktha Intelligence 🤖
 
-Yuktha Intelligence is an AI-powered business intelligence assistant that helps users generate structured, professional insights for business tasks using generative AI.
+Yuktha Intelligence is an AI-powered business strategy assistant built with Flask and Google Gemini.
 
-## Features
-- Smart business prompt generation
-- Clean AI-powered UI
-- Flask backend + HTML frontend
-- Secure API handling with environment variables
+## 🚀 Features
+- Generates structured business and marketing strategies
+- Clean modern UI
+- Powered by Google Gemini API
 
-## Tech Stack
+## 🛠 Tech Stack
 - Python (Flask)
-- Google Gemini API
-- HTML / CSS / JS
-- GitHub
+- Google Gemini API (`google-genai`)
+- HTML/CSS/JS frontend
 
-## How to Run
+## ⚙ Setup Instructions
 
+### 1. Clone the repo
 ```bash
-python app.py
+git clone https://github.com/samyukthalakshmi-03/yuktha-intelligence.git
+cd yuktha-intelligence
