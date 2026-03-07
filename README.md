@@ -2,6 +2,8 @@
 
 Yuktha Intelligence is an AI-powered business strategy assistant built with Flask and Google Gemini.
 
+**🔗 [Live Demo on Render](https://yuktha-intelligence.onrender.com/)** *(or your custom Render URL)*
+
 ## 🚀 Features
 - Generates structured business and marketing strategies
 - Clean modern UI
