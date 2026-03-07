@@ -186,16 +186,24 @@
     output.textContent = "";
     loader.style.display = "block";
 
-    const res = await fetch("/generate", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ business, task, details })
-    });
+    try {
+      const res = await fetch("/generate", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ business, task, details })
+      });
 
-    const data = await res.json();
+      if (!res.ok) {
+        throw new Error(`Server returned status: ${res.status}`);
+      }
 
-    loader.style.display = "none";
-    output.textContent = data.result;
+      const data = await res.json();
+      output.textContent = data.result;
+    } catch (err) {
+      output.textContent = "⚠ Error: " + err.message;
+    } finally {
+      loader.style.display = "none";
+    }
   }
 </script>
 

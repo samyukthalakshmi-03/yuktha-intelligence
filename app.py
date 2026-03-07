@@ -16,10 +16,13 @@ def home():
 
 @app.route("/generate", methods=["POST"])
 def generate():
-    data = request.json
+    data = request.get_json(silent=True) or {}
     business = data.get("business", "").strip()
     task = data.get("task", "").strip()
     details = data.get("details", "").strip()
+
+    if not os.getenv("GOOGLE_API_KEY"):
+        return jsonify({"result": "⚠ Error: GOOGLE_API_KEY environment variable is not set."})
 
     if not business and not task and not details:
         return jsonify({"result": "⚠ Please fill in at least one field."})
